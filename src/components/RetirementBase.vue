@@ -34,26 +34,38 @@
               </b-select>
             </b-field>
           </b-field>
-          <a>#buefy</a>.
         </div>
       </div>
       <footer class="card-footer">
-        <button class="card-footer-item">Calculate</button>
-        <button class="card-footer-item">Clear</button>
+        <button v-on:click="calculatePeriods" class="card-footer-item">Calculate</button>
+        <button v-on:click="resetCalculations" class="card-footer-item">Clear</button>
       </footer>
+    </div>
+    <div v-if="done_calculating" class="card">
+      <div>Months to retirement: {{ lineData.length }}</div>
+      <div>You have {{ Math.floor(lineData.length/12) }} Years and {{ lineData.length%12 }} Months to retire</div>
+      <LineChart :line_data="lineData"/>
+      <div v-for="prin in lineData">{{ prin }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import LineChart from '@/components/LineChart'
+
 export default {
   name: 'RetirementBase',
+  components: {
+    LineChart,
+  },
   data() {
     return {
       salary: 0,
       expenses: 0,
       retirement_expenses: 0,
       investments: [],
+      lineData: [],
+      done_calculating: false,
     };
   },
   methods: {
@@ -61,6 +73,31 @@ export default {
       this.investments.push({ type: '', interest: 0.00, distribution: '' });
       console.log(this.investments);
     },
+    calculatePeriods() {
+      // assumes the values. To take the correct ones later
+      const investment = 30; // percent
+      const interest = 6.5; // percent
+      const retirementReached = (this.retirement_expenses * this.salary) / 100;
+
+      // calculations
+      const monthlyInvest = (investment * this.salary) / 100;
+      const monthlyInterest = interest / 1200;
+      const monthPrincipals = [0];
+      while (true) {
+        const principal = monthPrincipals[monthPrincipals.length - 1];
+        const newPrincipal = principal + (principal * monthlyInterest);
+        monthPrincipals.push(newPrincipal + monthlyInvest);
+        if (newPrincipal - principal >= retirementReached) {
+          break;
+        }
+      }
+      // this.$set(this.lineData, monthPrincipals);
+      this.lineData = monthPrincipals;
+      this.done_calculating = true;
+    },
+    resetCalculations() {
+      this.done_calculating = false;
+    }
   },
 };
 </script>
