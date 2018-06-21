@@ -104,13 +104,9 @@ export default {
       // the limit where investments can sustain you alone
       const retirementReached = (this.retirement_expenses * this.salary) / 100;
       // Check that percentages add up to at most 100
-      console.log('Checking changes');
-      console.log(this.expenses);
-      console.log(this.investments);
 
       const total = this.expenses + this.investments.reduce((accumulator, currentValue) =>
         accumulator + parseInt(currentValue.percentage, 0), 0);
-      console.log(total);
       if (total > 100) {
         console.log('Total is greater than 100');
         return;
@@ -127,7 +123,6 @@ export default {
       }
       // lineData should be sum of investments per month
       const principals = monthlyInvestments.map(x => x.principal);
-      console.log(principals.length);
 
       let start = principals[0];
       for (let i = 1; i < principals.length - 1; i += 1) {
