@@ -105,8 +105,9 @@ export default {
       const retirementReached = (this.retirement_expenses * this.salary) / 100;
       // Check that percentages add up to at most 100
 
-      const total = this.expenses + this.investments.reduce((accumulator, currentValue) =>
+      const total = parseInt(this.expenses) + this.investments.reduce((accumulator, currentValue) =>
         accumulator + parseInt(currentValue.percentage, 0), 0);
+      console.log(total);
       if (total > 100) {
         console.log('Total is greater than 100');
         return;
