@@ -1,0 +1,14 @@
+language: node.js
+node_js:
+    - "iojs"
+    - "7"
+
+install:
+    - npm install
+
+jobs:
+    include:
+        - script: echo "Building the project ..."
+        - script: npm run build
+        - script: echo "Deploying to server ..."
+        - script: echo "Add deploy script here"
