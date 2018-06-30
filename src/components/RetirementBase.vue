@@ -4,13 +4,18 @@
       <p class="card-header-title">Income Options</p>
       <div class="card-content">
         <div class="content">
+          <b-field horizontal label="Choose between % or Ksh for inputs">
+            <b-switch v-model="use_percent">
+              {{ use_percent_text }}
+            </b-switch>
+          </b-field>
           <b-field horizontal label="Monthly Salary">
             <b-input v-model="salary" type="number" step="any"></b-input>
           </b-field>
-          <b-field horizontal label="% used on Monthly Expenditure">
+          <b-field horizontal :label="label_monthly">
             <b-input v-model="expenses" type="number" step="any"></b-input>
           </b-field>
-          <b-field horizontal label="% Monthly Expenses on Retiring">
+          <b-field horizontal :label="label_retire">
             <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
           </b-field>
 
@@ -22,9 +27,10 @@
               <b-select v-model="invest.type">
                 <option>Bank Savings Account</option>
                 <option>Bank Fixed Deposit Account</option>
+                <option>Other</option>
               </b-select>
             </b-field>
-            <b-field label="Mean Interest %">
+            <b-field label="Annual Mean Interest %">
               <b-input type="number" step="any"  v-model="invest.interest"></b-input>
             </b-field>
             <b-field label="Distribution">
@@ -33,7 +39,7 @@
                 <!-- <option>Gaussian</option> -->
               </b-select>
             </b-field>
-            <b-field label="% of income">
+            <b-field :label="label_invest_income">
               <b-input type="number" step="any" v-model="invest.percentage"></b-input>
             </b-field>
           </b-field>
@@ -44,25 +50,29 @@
         <button v-on:click="resetCalculations" class="card-footer-item">Clear</button>
       </footer>
     </div>
+    <b-message v-if="error" title="Problem Encountered" type="is-danger">
+      {{ error_message }}
+    </b-message>
     <div v-if="done_calculating" class="card">
       <div>Months to retirement: {{ lineData.length }}</div>
       <div>You have {{ Math.floor(lineData.length/12) }} Years
         and {{ lineData.length%12 }} Months to retire</div>
       <LineChart :line_data="lineData"/>
-      <div v-for="prin in lineData">{{ prin }}</div>
+      <!-- <div v-for="prin in lineData">{{ prin }}</div> -->
     </div>
   </div>
 </template>
 
 <script>
 import LineChart from '@/components/LineChart'
+import { calculateInvestmentPeriods } from '@/calculations/investments'
 
 export default {
   name: 'RetirementBase',
   components: {
-    LineChart,
+    LineChart
   },
-  data() {
+  data () {
     return {
       salary: 10000,
       expenses: 50,
@@ -70,71 +80,71 @@ export default {
       investments: [],
       lineData: [],
       done_calculating: false,
-    };
+      use_percent: true,
+      use_percent_text: 'Percent %',
+      error: false,
+      error_message: ''
+    }
+  },
+  watch: {
+    use_percent (val) {
+      console.log(val)
+      if (val) {
+        this.use_percent_text = 'Percent %'
+        return
+      }
+      this.use_percent_text = 'Ksh'
+    }
+  },
+  computed: {
+    label_monthly: function () {
+      if (this.use_percent) {
+        return '% used on Monthly Expenditure'
+      }
+      return 'Ksh used per month'
+    },
+    label_retire: function () {
+      if (this.use_percent) {
+        return '% of income used on retirement'
+      }
+      return 'Ksh used per month on retirement'
+    },
+    label_invest_income: function () {
+      if (this.use_percent) {
+        return '% of income'
+      }
+      return 'Ksh per month'
+    }
   },
   methods: {
-    add_investment() {
+    add_investment () {
       this.investments.push({
         id: this.investments.length - 1,
         type: '',
         interest: 10.00,
         distribution: '',
-        percentage: 10,
-      });
+        percentage: 10
+      })
     },
-    get_monthly_investments(investments, salary) {
-      return investments.map((invest) => {
-        const monthly = {
-          invest: (invest.percentage * salary) / 100,
-          interest: (invest.interest / 1200),
-          principal: [0],
-          profit: [0],
-        };
-        return monthly;
-      });
-    },
-    individual_invest_calculations(x) {
-      const principal = x.principal[x.principal.length - 1];
-      const newPrincipal = principal + (principal * x.interest);
-      x.principal.push(newPrincipal + x.invest);
-      x.profit.push(newPrincipal - principal);
-      return x;
-    },
-    calculatePeriods() {
-      // the limit where investments can sustain you alone
-      const retirementReached = (this.retirement_expenses * this.salary) / 100;
-      // Check that percentages add up to at most 100
-
-      const total = parseInt(this.expenses) + this.investments.reduce((accumulator, currentValue) =>
-        accumulator + parseInt(currentValue.percentage, 0), 0);
-      console.log(total);
-      if (total > 100) {
-        console.log('Total is greater than 100');
-        return;
+    calculatePeriods () {
+      this.resetCalculations()
+      const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses, this.retirement_expenses, this.use_percent)
+      const passed = result.passed
+      console.log(passed)
+      if (!passed) {
+        this.error = true
+        this.error_message = result.message
+        return
       }
-      // this.investments is an array of investments made per month at a particular percentage
-      // create array on monthlyinvestments, monthlyinterest and monthly principals
-      let monthlyInvestments = this.get_monthly_investments(this.investments.slice(), this.salary);
-      let profit = 0;
-      while (profit <= retirementReached) {
-        monthlyInvestments = monthlyInvestments.map(this.individual_invest_calculations);
-        // calculate profits
-        profit = monthlyInvestments.reduce((acc, current) =>
-          acc + current.profit[current.profit.length - 1], 0);
-      }
-      // lineData should be sum of investments per month
-      const principals = monthlyInvestments.map(x => x.principal);
-
-      let start = principals[0];
-      for (let i = 1; i < principals.length - 1; i += 1) {
-        start = start.map((num, index) => num + principals[i][index]);
-      }
-      this.lineData = start;
-      this.done_calculating = true;
+      this.error = false
+      this.lineData = result.data
+      this.done_calculating = true
     },
-    resetCalculations() {
-      this.done_calculating = false;
-    },
-  },
-};
+    resetCalculations () {
+      this.done_calculating = false
+      this.lineData = []
+      this.error = false
+    }
+  }
+}
 </script>
