@@ -22,26 +22,33 @@
           Add select form on investments made
           <button v-on:click="add_investment">Add</button>
 
-          <b-field grouped v-for="invest in investments" v-bind:key="invest.id">
-            <b-field label="Type">
-              <b-select v-model="invest.type">
-                <option>Bank Savings Account</option>
-                <option>Bank Fixed Deposit Account</option>
-                <option>Other</option>
-              </b-select>
-            </b-field>
-            <b-field label="Annual Mean Interest %">
-              <b-input type="number" step="any"  v-model="invest.interest"></b-input>
-            </b-field>
-            <b-field label="Distribution">
-              <b-select v-model="invest.distribution">
-                <option>Constant</option>
-                <!-- <option>Gaussian</option> -->
-              </b-select>
-            </b-field>
-            <b-field :label="label_invest_income">
-              <b-input type="number" step="any" v-model="invest.percentage"></b-input>
-            </b-field>
+          <b-field grouped v-for="(invest, index) in investments" v-bind:key="index">
+            <div class="columns">
+              <b-field class="column" label="Type">
+                <b-select v-model="invest.type">
+                  <option>Bank Savings Account</option>
+                  <option>Bank Fixed Deposit Account</option>
+                  <option>Other</option>
+                </b-select>
+              </b-field>
+              <b-field class="column" label="Annual Int %">
+                <b-input type="number" step="any"  v-model="invest.interest"></b-input>
+              </b-field>
+              <b-field class="column" label="Distribution">
+                <b-select v-model="invest.distribution">
+                  <option>Constant</option>
+                  <!-- <option>Gaussian</option> -->
+                </b-select>
+              </b-field>
+              <b-field class="column" :label="label_invest_income">
+                <b-input type="number" step="any" v-model="invest.percentage"></b-input>
+              </b-field>
+              <b-field class="column is-narrow" label="remove">
+                <button class="button" @click="removeInvestment(index)">
+                  Remove
+                </button>
+              </b-field>
+            </div>
           </b-field>
         </div>
       </div>
@@ -118,13 +125,16 @@ export default {
   },
   methods: {
     add_investment () {
+      console.log('Adding somethig')
       this.investments.push({
-        id: this.investments.length - 1,
         type: '',
         interest: 10.00,
         distribution: '',
         percentage: 10
       })
+    },
+    removeInvestment (index) {
+      this.investments.splice(index, 1)
     },
     calculatePeriods () {
       this.resetCalculations()
