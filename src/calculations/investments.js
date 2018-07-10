@@ -17,9 +17,11 @@ function individualInvestCalculations (x) {
   x.profit.push(newPrincipal - principal)
   return x
 }
+function considerDeath (death, start) {
+}
 
 export function calculateInvestmentPeriods (
-  investments, salary, expenses, retirementExpenses, usePercent = true
+  investments, salary, expenses, retirementExpenses, usePercent = true, death = Infinity
 ) {
   if (investments.length <= 0) {
     return {
@@ -72,6 +74,10 @@ export function calculateInvestmentPeriods (
   let start = principals[0]
   for (let i = 1; i < principals.length - 1; i += 1) {
     start = start.map((num, index) => num + principals[i][index])
+  }
+
+  if (death !== Infinity || death !== 0) {
+    start = considerDeath(death, start)
   }
   return {
     passed: true,

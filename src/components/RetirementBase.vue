@@ -9,6 +9,9 @@
               {{ use_percent_text }}
             </b-switch>
           </b-field>
+          <b-field horizontal label="Years before Death">
+            <b-input v-model="death" type="number" step="any"></b-input>
+          </b-field>
           <b-field horizontal label="Monthly Salary">
             <b-input v-model="salary" type="number" step="any"></b-input>
           </b-field>
@@ -59,6 +62,7 @@ export default {
     return {
       salary: 10000,
       expenses: 50,
+      death: Infinity,
       retirement_expenses: 60,
       investments: [],
       lineData: [],
@@ -107,7 +111,7 @@ export default {
     },
     calculatePeriods () {
       this.resetCalculations()
-      const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses, this.retirement_expenses, this.use_percent)
+      const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses, this.retirement_expenses, this.use_percent, this.death)
       const passed = result.passed
       console.log(passed)
       if (!passed) {
