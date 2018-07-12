@@ -17,7 +17,16 @@ function individualInvestCalculations (x) {
   x.profit.push(newPrincipal - principal)
   return x
 }
-function considerDeath (death, start) {
+function considerDeath (death, retirementExpenses, start) {
+  let months = death * 12
+  for (var i = 0; i < start.length; i++) {
+    let requiredPrincipal = months * retirementExpenses
+    if (start[i] > requiredPrincipal) {
+      return start.slice(0, i + 1)
+    }
+    months = months - 1
+  }
+  return start
 }
 
 export function calculateInvestmentPeriods (
@@ -35,7 +44,6 @@ export function calculateInvestmentPeriods (
     expenses = parseInt(expenses) / salary * 100
     investments = investments.map(obj => {
       obj.percentage = (obj.percentage / salary) * 100
-      console.log(obj.percentage)
       return obj
     })
   }
@@ -58,6 +66,15 @@ export function calculateInvestmentPeriods (
       message: 'Total amount is greater than income'
     }
   }
+  if (total < 100) {
+    // add an investment at 0% interest rate
+    investments.push({
+      type: 'savings',
+      interest: 0,
+      distribution: '',
+      percentage: 100 - total
+    })
+  }
   // this.investments is an array of investments made per month at a particular percentage
   // create array on monthlyinvestments, monthlyinterest and monthly principals
   let monthlyInvestments = getMonthlyInvestments(investments.slice(), salary)
@@ -76,9 +93,10 @@ export function calculateInvestmentPeriods (
     start = start.map((num, index) => num + principals[i][index])
   }
 
-  if (death !== Infinity || death !== 0) {
-    start = considerDeath(death, start)
+  if (death > 0 && death < Infinity) {
+    start = considerDeath(death, retirementReached, start)
   }
+
   return {
     passed: true,
     data: start

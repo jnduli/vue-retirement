@@ -1,16 +1,19 @@
 <template>
   <div id="app">
     <RetirementBase/>
+    <!-- <Gaussian/> -->
   </div>
 </template>
 
 <script>
-import RetirementBase from './components/RetirementBase.vue';
+import RetirementBase from './components/RetirementBase.vue'
+import Gaussian from './components/Gaussian.vue'
 
 export default {
   name: 'app',
   components: {
     RetirementBase,
+    Gaussian
   },
 };
 </script>

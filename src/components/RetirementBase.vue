@@ -75,7 +75,6 @@ export default {
   },
   watch: {
     use_percent (val) {
-      console.log(val)
       if (val) {
         this.use_percent_text = 'Percent %'
         return
@@ -113,7 +112,6 @@ export default {
       this.resetCalculations()
       const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses, this.retirement_expenses, this.use_percent, this.death)
       const passed = result.passed
-      console.log(passed)
       if (!passed) {
         this.error = true
         this.error_message = result.message
