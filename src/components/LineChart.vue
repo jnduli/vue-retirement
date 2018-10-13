@@ -11,57 +11,88 @@
 </template>
 
 <script>
-import * as d3 from 'd3';
+import * as d3 from 'd3'
 
 export default {
   name: 'vue-line-chart',
   props: {
     line_data: {
       type: Array,
-      default: () => [],
-    },
+      default: () => []
+    }
   },
-  data() {
+  data () {
     return {
-      line: '',
-    };
+      line: ''
+    }
   },
-  mounted() {
-    this.calculatePath();
+  mounted () {
+    this.calculatePath()
   },
   watch: {
-    line_data() {
-      this.calculatePath();
-    },
+    line_data () {
+      this.calculatePath()
+    }
   },
   methods: {
-    calculatePath() {
-      const data = this.line_data.map((cur, idx) => ({ y: cur, x: idx }));
+    calculatePath () {
+      const data = this.line_data.map((cur, idx) => ({ y: cur, x: idx }))
+      const dot_data = data.filter((elem, index) => (index % 6 === 0))
       const margin = {
         top: 40,
         right: 40,
         bottom: 60,
-        left: 60,
-      };
-      const width = 960 - margin.left - margin.right;
-      const height = 800 - margin.top - margin.bottom;
+        left: 60
+      }
+      const width = 960 - margin.left - margin.right
+      const height = 800 - margin.top - margin.bottom
 
       const x = d3.scaleLinear()
         .domain([0, data.length])
-        .range([0, width]);
+        .range([0, width])
       const y = d3.scaleLinear()
         .domain([this.line_data[0], this.line_data[this.line_data.length - 1]])
-        .range([height, 0]);
+        .range([height, 0])
       const line = d3.line()
         .x(d => x(d.x))
-        .y(d => y(d.y));
+        .y(d => y(d.y))
 
       const svg = d3.select('#graph').append('svg')
         .datum(data)
         .attr('width', width + margin.left + margin.right)
         .attr('height', height + margin.top + margin.bottom)
         .append('g')
-        .attr('transform', `translate(${margin.left}, ${margin.top})`);
+        .attr('transform', `translate(${margin.left}, ${margin.top})`)
+
+      // Define the div for the tooltip
+      var div = d3.select('body').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0)
+
+      const dot_line = d3.line()
+        .x(d => x(d.x))
+        .y(d => y(d.y))
+
+      svg.selectAll('dot')
+        .data(dot_data)
+        .enter()
+        .append('circle')
+        .attr('r', 5)
+        .attr('cx', dot_line.x())
+        .attr('cy', dot_line.y())
+        .on('mouseover', function (d) {
+          div.transition()
+            .duration(200)
+            .style('opacity', 0.9)
+          div.html('Something I kno' + '<br/>')
+            .style('left', (d3.event.pageX) + 'px')
+            .style('top', (d3.event.pageY - 28) + 'px')
+        })
+        .on('mouseout', function (d) {
+          div.transition()
+            .duration(500)
+            .style('opacity', 0)
+        })
 
       svg.append('text')
         .attr('transform', 'rotate(-90)')
@@ -69,37 +100,30 @@ export default {
         .attr('x', 0 - (height / 2))
         .attr('dy', '1em')
         .style('text-anchor', 'middle')
-        .text('Value of investments');
+        .text('Value of investments')
 
       svg.append('g')
         .attr('class', 'axis axis--x')
         .attr('transform', `translate(0, ${height})`)
-        .call(d3.axisBottom(x));
-      console.log(`Somthing ${height}`);
+        .call(d3.axisBottom(x))
+      console.log(`Somthing ${height}`)
 
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height + margin.top + 10})`)
         .style('text-anchor', 'middle')
-        .text('Number of months');
+        .text('Number of months')
 
       svg.append('g')
         .attr('class', 'axis axis--y')
-        .call(d3.axisLeft(y));
+        .call(d3.axisLeft(y))
 
       svg.append('path')
         .attr('class', 'line')
-        .attr('d', line);
+        .attr('d', line)
 
-      // svg.selectAll('.dot')
-      // .data(data.filter(function(d) { return d; }))
-      // .enter().append('circle')
-      // .attr('class', 'dot')
-      // .attr('cx', line.x())
-      // .attr('cy', line.y())
-      // .attr('r', 1.5);
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style>
@@ -117,5 +141,16 @@ export default {
   fill: white;
   stroke: steelblue;
   stroke-width: 1.5px;
+}
+
+div.tooltip {
+  position: absolute;
+  text-align: center;
+  padding: 2px;
+  font: 12px sans-serif;
+  background: lightsteelblue;
+  border: 0px;
+  border-radius: 8px;
+  pointer-events: none;
 }
 </style>
