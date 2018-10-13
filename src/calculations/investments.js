@@ -17,6 +17,7 @@ function individualInvestCalculations (x) {
   x.profit.push(newPrincipal - principal)
   return x
 }
+
 function considerDeath (death, retirementExpenses, start) {
   let months = death * 12
   for (var i = 0; i < start.length; i++) {
@@ -29,6 +30,19 @@ function considerDeath (death, retirementExpenses, start) {
   return start
 }
 
+function getInvestmentParameters (investments, salary, expenses, retirementExpenses, usePercent = true) {
+  if (!usePercent) {
+    retirementExpenses = parseInt(retirementExpenses) / salary * 100
+    expenses = parseInt(expenses) / salary * 100
+    investments = investments.map(obj => {
+      obj.percentage = (obj.percentage / salary) * 100
+      return obj
+    })
+    return [retirementExpenses, expenses, investments]
+  }
+  return [retirementExpenses, expenses, investments]
+}
+
 export function calculateInvestmentPeriods (
   investments, salary, expenses, retirementExpenses, usePercent = true, death = Infinity
 ) {
@@ -39,14 +53,7 @@ export function calculateInvestmentPeriods (
     }
   }
 
-  if (!usePercent) {
-    retirementExpenses = parseInt(retirementExpenses) / salary * 100
-    expenses = parseInt(expenses) / salary * 100
-    investments = investments.map(obj => {
-      obj.percentage = (obj.percentage / salary) * 100
-      return obj
-    })
-  }
+  [retirementExpenses, expenses, investments] = getInvestmentParameters(investments, salary, expenses, retirementExpenses, usePercent)
 
   const retirementReached = retirementExpenses * salary / 100
   // check that percentages add up to at most 100
@@ -99,6 +106,7 @@ export function calculateInvestmentPeriods (
 
   return {
     passed: true,
-    data: start
+    data: start,
+    extras: monthlyInvestments
   }
 }

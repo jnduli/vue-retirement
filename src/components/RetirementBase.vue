@@ -41,7 +41,7 @@
       <div>Months to retirement: {{ lineData.length }}</div>
       <div>You have {{ Math.floor(lineData.length/12) }} Years
         and {{ lineData.length%12 }} Months to retire</div>
-      <LineChart :line_data="lineData"/>
+      <LineChart :line_data="lineData" :tooltip_data="toolTipData"/>
       <!-- <div v-for="prin in lineData">{{ prin }}</div> -->
     </div>
   </div>
@@ -66,6 +66,7 @@ export default {
       retirement_expenses: 60,
       investments: [],
       lineData: [],
+      toolTipData: [],
       done_calculating: false,
       use_percent: true,
       use_percent_text: 'Percent %',
@@ -119,11 +120,14 @@ export default {
       }
       this.error = false
       this.lineData = result.data
+      this.toolTipData = result.extras
+      // console.log(this.toolTipData)
       this.done_calculating = true
     },
     resetCalculations () {
       this.done_calculating = false
       this.lineData = []
+      this.toolTipData = []
       this.error = false
     }
   }

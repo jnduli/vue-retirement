@@ -2,11 +2,6 @@
   <div>
     <div id="graph">
     </div>
-    <!-- <svg width="500" height="270"> -->
-    <!-- <g style="transform: translate(0, 10px)"> -->
-    <!-- <path :d="line" /> -->
-    <!-- </g> -->
-    <!-- </svg> -->
   </div>
 </template>
 
@@ -17,6 +12,10 @@ export default {
   name: 'vue-line-chart',
   props: {
     line_data: {
+      type: Array,
+      default: () => []
+    },
+    tooltip_data: {
       type: Array,
       default: () => []
     }
@@ -35,9 +34,20 @@ export default {
     }
   },
   methods: {
+    getToolTipInvestment: function (toolTipData, index) {
+      let text = '<div class="card">'
+      console.log(index)
+      for (let i = 0; i < toolTipData.length; i += 1) {
+        let el = toolTipData[i]
+        text = text + `<div>Investment ${i + 1}: ${Math.floor(el['principal'][index])}</div>`
+      }
+      text = text + '</div>'
+      return text
+    },
     calculatePath () {
       const data = this.line_data.map((cur, idx) => ({ y: cur, x: idx }))
-      const dot_data = data.filter((elem, index) => (index % 6 === 0))
+      const dotStep = 10
+      const dotData = data.filter((elem, index) => (index % dotStep === 0))
       const margin = {
         top: 40,
         right: 40,
@@ -57,7 +67,7 @@ export default {
         .x(d => x(d.x))
         .y(d => y(d.y))
 
-      d3.select("svg").remove()
+      d3.select('svg').remove()
 
       const svg = d3.select('#graph').append('svg')
         .datum(data)
@@ -71,22 +81,23 @@ export default {
         .attr('class', 'tooltip')
         .style('opacity', 0)
 
-      const dot_line = d3.line()
+      const dotLine = d3.line()
         .x(d => x(d.x))
         .y(d => y(d.y))
 
+      var $this = this
       svg.selectAll('dot')
-        .data(dot_data)
+        .data(dotData)
         .enter()
         .append('circle')
         .attr('r', 5)
-        .attr('cx', dot_line.x())
-        .attr('cy', dot_line.y())
-        .on('mouseover', function (d) {
+        .attr('cx', dotLine.x())
+        .attr('cy', dotLine.y())
+        .on('mouseover', function (d, i) {
           div.transition()
             .duration(200)
             .style('opacity', 0.9)
-          div.html('Something I kno' + '<br/>')
+          div.html($this.getToolTipInvestment($this.tooltip_data, i * dotStep))
             .style('left', (d3.event.pageX) + 'px')
             .style('top', (d3.event.pageY - 28) + 'px')
         })
@@ -122,7 +133,6 @@ export default {
       svg.append('path')
         .attr('class', 'line')
         .attr('d', line)
-
     }
   }
 }
@@ -154,5 +164,6 @@ div.tooltip {
   border: 0px;
   border-radius: 8px;
   pointer-events: none;
+  width: 200px;
 }
 </style>
