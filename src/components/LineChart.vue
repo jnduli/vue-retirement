@@ -57,6 +57,8 @@ export default {
         .x(d => x(d.x))
         .y(d => y(d.y))
 
+      d3.select("svg").remove()
+
       const svg = d3.select('#graph').append('svg')
         .datum(data)
         .attr('width', width + margin.left + margin.right)
