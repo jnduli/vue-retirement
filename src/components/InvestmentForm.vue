@@ -7,6 +7,11 @@
         <option>Other</option>
       </b-select>
     </b-field>
+    <b-field class="column" label="Interest">
+      <b-select v-model="invest.interest_type">
+        <option v-for="type in investment_type">{{ type }}</option>
+      </b-select>
+    </b-field>
     <b-field class="column" label="Annual Int %">
       <b-input type="number" step="any"  v-model="invest.interest"></b-input>
     </b-field>
@@ -28,11 +33,18 @@
 </template>
 
 <script>
+import { INVESTMENT_TYPE } from '@/calculations/investments.js'
 export default {
   name: 'InvestmentForm',
   props: ['invest', 'index', 'use_percent'],
+  data () {
+    return {
+      investment_type: INVESTMENT_TYPE
+    }
+  },
   computed: {
     label_invest_income: function () {
+      console.log(this.INVESTMENT_TYPE)
       if (this.use_percent) {
         return '% of income'
       }

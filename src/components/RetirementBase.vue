@@ -101,6 +101,7 @@ export default {
     add_investment () {
       this.investments.push({
         type: '',
+        interest_type: 'simple',
         interest: 10.00,
         distribution: '',
         percentage: 10

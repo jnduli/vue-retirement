@@ -1,21 +1,17 @@
-function getMonthlyInvestments (investments, salary) {
-  return investments.map((invest) => {
-    const monthly = {
-      invest: (invest.percentage * salary) / 100,
-      interest: (invest.interest / 1200),
-      principal: [0],
-      profit: [0]
-    }
-    return monthly
-  })
-}
+import { organizeCIMonthlyInvestments, addCIMonthlyInvestments, getCIMonthlyProfit } from './CompoundInterest'
+import { organizeSIMonthlyInvestments, getSIAccumulatedAmount, getSIMonthlyProfit } from './SimpleInterest'
 
-function individualInvestCalculations (x) {
-  const principal = x.principal[x.principal.length - 1]
-  const newPrincipal = principal + (principal * x.interest)
-  x.principal.push(newPrincipal + x.invest)
-  x.profit.push(newPrincipal - principal)
-  return x
+export const SIMPLE_INTEREST = 'simple'
+export const COMPOUND_INTEREST = 'compound'
+export const NO_INTEREST = 'none'
+
+export const INVESTMENT_TYPE = [SIMPLE_INTEREST, COMPOUND_INTEREST, NO_INTEREST]
+
+function splitInvestments (investments) {
+  const simpleInvestments = investments.filter(invest => invest.interest_type === SIMPLE_INTEREST)
+  const compoundInvestments = investments.filter(invest => invest.interest_type === COMPOUND_INTEREST)
+  const zeroInvestments = investments.filter(invest => invest.interest_type === NO_INTEREST)
+  return [simpleInvestments, compoundInvestments, zeroInvestments]
 }
 
 function considerDeath (death, retirementExpenses, start) {
@@ -77,32 +73,42 @@ export function calculateInvestmentPeriods (
     // add an investment at 0% interest rate
     investments.push({
       type: 'savings',
+      interest_type: NO_INTEREST,
       interest: 0,
       distribution: '',
       percentage: 100 - total
     })
   }
+  let [si, ci, ni] = splitInvestments(investments)
+  // do this because logic for no_interest has not been implemented
+  // ci.push(ni)
+
+  si = organizeSIMonthlyInvestments(si.slice(), salary)
+
   // this.investments is an array of investments made per month at a particular percentage
   // create array on monthlyinvestments, monthlyinterest and monthly principals
-  let monthlyInvestments = getMonthlyInvestments(investments.slice(), salary)
+  let monthlyInvestments = organizeCIMonthlyInvestments(ci.slice(), salary)
   let profit = 0
+  let month = 0
   while (profit <= retirementReached) {
-    monthlyInvestments = monthlyInvestments.map(individualInvestCalculations)
-    // calculate profits
-    profit = monthlyInvestments.reduce((acc, current) =>
-      acc + current.profit[current.profit.length - 1], 0)
+    monthlyInvestments = addCIMonthlyInvestments(monthlyInvestments)
+    profit = getCIMonthlyProfit(monthlyInvestments) + getSIMonthlyProfit(si, month)
+    month = month + 1
   }
   // lineData should be sum of investments per month
-  const principals = monthlyInvestments.map(x => x.principal)
+  const principals = monthlyInvestments.map((x) => x.principal)// + getSIAccumulatedAmount(si, month))
 
   let start = principals[0]
   for (let i = 1; i < principals.length - 1; i += 1) {
     start = start.map((num, index) => num + principals[i][index])
   }
 
+  start = start.map((num, month) => num + getSIAccumulatedAmount(si, month))
+
   if (death > 0 && death < Infinity) {
     start = considerDeath(death, retirementReached, start)
   }
+  // TODO: extras does not include simple interest amounts
 
   return {
     passed: true,
