@@ -26,7 +26,6 @@ function individualInvestCalculations (x, month) {
 
 export function getSIAccumulatedAmount (investments, month) {
   let si = investments.map(x => individualInvestCalculations(x, month))
-  console.log(si)
   return si.reduce((acc, cur) => acc + cur.principal + cur.accumulatedInterest, 0)
 }
 

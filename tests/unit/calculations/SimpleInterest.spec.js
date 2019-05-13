@@ -55,7 +55,6 @@ describe('SimpleInterest Calculations', () => {
         profit: [0]
       }
     ]
-    console.log(investments);
     const accumulatedAmount = getSIAccumulatedAmount(investments, 3)
     expect(accumulatedAmount).toEqual(9200)
   })
