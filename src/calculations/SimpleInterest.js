@@ -14,7 +14,9 @@ export function organizeSIMonthlyInvestments (investments, salary) {
 function individualInvestCalculations (x, month) {
   const principal = month * x.invest
   const profit = x.interest * principal
-  const accumulatedInterest = Array.from(Array(month).keys()).reduce((acc, cur) => acc + cur, 0)
+  // create array of months ie. [1, 2, 3 ... month]
+  const months = Array.from({length: month}, (val, index) => index + 1)
+  const accumulatedInterest = months.reduce((acc, cur) => acc + (cur * x.invest * x.interest), 0)
   return {
     principal: principal,
     profit: profit,
@@ -24,6 +26,7 @@ function individualInvestCalculations (x, month) {
 
 export function getSIAccumulatedAmount (investments, month) {
   let si = investments.map(x => individualInvestCalculations(x, month))
+  console.log(si)
   return si.reduce((acc, cur) => acc + cur.principal + cur.accumulatedInterest, 0)
 }
 
