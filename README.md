@@ -27,3 +27,6 @@ one's life time (when one inputs the expected life time).
 
 # Live Example
 [live example](https://jnduli.co.ke/retirement/)
+
+## Running tests
+`npm run test:unit`
