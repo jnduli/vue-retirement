@@ -14,7 +14,6 @@ describe('Home Page', () => {
         RouterLink: RouterLinkStub
       }
     })
-    console.log(wrapper.html())
     const button = wrapper.find('#retirement-button')
     expect(button.attributes().class).toBe('button')
   })
