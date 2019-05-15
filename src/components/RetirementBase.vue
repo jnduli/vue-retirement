@@ -9,18 +9,41 @@
               {{ use_percent_text }}
             </b-switch>
           </b-field>
-          <b-field horizontal label="Years before Death">
-            <b-input v-model="death" type="number" step="any"></b-input>
+
+
+          <b-field grouped>
+            <b-field label="Income (Monthly)">
+              <b-tooltip label="How much you earn per month" class="control" multilined>
+                <button class="button">?</button>
+              </b-tooltip>
+              <b-input v-model="salary" type="number" step="any"></b-input>
+            </b-field>
+            <b-field label="Expected Years">
+              <b-field class="control">
+              <b-tooltip label="How many years from now do you expect the fund to last for" class="control" multilined>
+                <button class="button">?</button>
+              </b-tooltip>
+              </b-field>
+              <b-input v-model="death" type="number" step="any"></b-input>
+            </b-field>
           </b-field>
-          <b-field horizontal label="Monthly Salary">
-            <b-input v-model="salary" type="number" step="any"></b-input>
+
+          <b-field grouped>
+            <b-field label="Monthly Expenses">
+              <b-tooltip label="How much do you spend per month? This can be a percentage of the income or an actual value" class="control" multilined>
+                <button class="button">?</button>
+              </b-tooltip>
+              <b-input v-model="expenses" type="number" step="any"></b-input>
+            </b-field>
+            <b-field label="Retirement Expenses">
+              <b-tooltip label="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value" class="control" multilined>
+                <button class="button">?</button>
+              </b-tooltip>
+              <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
+            </b-field>
           </b-field>
-          <b-field horizontal :label="label_monthly">
-            <b-input v-model="expenses" type="number" step="any"></b-input>
-          </b-field>
-          <b-field horizontal :label="label_retire">
-            <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
-          </b-field>
+
+
 
           Add select form on investments made
           <button v-on:click="add_investment">Add</button>
