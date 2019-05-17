@@ -46,7 +46,10 @@
 
 
           Add select form on investments made
-          <button v-on:click="add_investment">Add</button>
+        <b-modal :active.sync="isAddInvestmentModalActive" has-modal-card>
+            <add-investment-modal></add-investment-modal>
+        </b-modal>
+          <button v-on:click="isAddInvestmentModalActive = true">Add</button>
           <b-field grouped v-for="(invest, index) in investments" v-bind:key="index">
             <investment-form :invest='invest' :index='index' :use_percent='use_percent' v-on:removeInvestment="removeInvestment"/>
           </b-field>
@@ -73,21 +76,32 @@
 <script>
 import LineChart from '@/components/LineChart'
 import InvestmentForm from '@/components/InvestmentForm'
+import AddInvestmentModal from '@/components/AddInvestmentModal'
 import { calculateInvestmentPeriods } from '@/calculations/investments'
 
 export default {
   name: 'RetirementBase',
   components: {
     LineChart,
-    InvestmentForm
+    InvestmentForm,
+    AddInvestmentModal
   },
   data () {
     return {
+      isAddInvestmentModalActive: false,
       salary: 10000,
       expenses: 50,
       death: Infinity,
       retirement_expenses: 60,
-      investments: [],
+      investments: [
+      {
+        type: 'Bank Savings Account',
+        interest_type: 'simple',
+        interest: 10.00,
+        distribution: '',
+        percentage: 57
+      }
+        ],
       lineData: [],
       toolTipData: [],
       done_calculating: false,
