@@ -5,6 +5,7 @@ import RetirementBase from '@/components/RetirementBase.vue'
 describe('Home Page', () => {
   it('renders explanation message', () => {
     const wrapper = shallowMount(Home)
+    expect(wrapper.text()).toContain('STAAFU')
     expect(wrapper.text()).toContain('help you')
   })
 

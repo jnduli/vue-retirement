@@ -1,7 +1,7 @@
 <template>
   <section class="section">
     <div class="container">
-      <h1 class="title">Section</h1>
+      <h1 class="title">STAAFU</h1>
       <div/>
       <h2 class="subtitle">
       This is a retirement app that will help you check out on how your
