@@ -4,8 +4,8 @@
       <p class="card-header-title">Income Options</p>
       <div class="card-content">
         <div class="content">
-          <b-field horizontal label="Choose between % or Ksh for inputs">
-            <b-switch v-model="use_percent">
+          <b-field horizontal label="Input % for inputs">
+            <b-switch v-model="fake_use_percent">
               {{ use_percent_text }}
             </b-switch>
           </b-field>
@@ -47,7 +47,7 @@
 
           Add select form on investments made
         <b-modal :active.sync="isAddInvestmentModalActive" has-modal-card>
-            <add-investment-modal></add-investment-modal>
+            <add-investment-modal :use-percent='use_percent' v-on:addInvestment="addInvestment"></add-investment-modal>
         </b-modal>
           <button v-on:click="isAddInvestmentModalActive = true">Add</button>
           <b-field grouped v-for="(invest, index) in investments" v-bind:key="index">
@@ -93,19 +93,12 @@ export default {
       expenses: 50,
       death: Infinity,
       retirement_expenses: 60,
-      investments: [
-      {
-        type: 'Bank Savings Account',
-        interest_type: 'simple',
-        interest: 10.00,
-        distribution: '',
-        percentage: 57
-      }
-        ],
+      investments: [],
       lineData: [],
       toolTipData: [],
       done_calculating: false,
       use_percent: true,
+      fake_use_percent: true,
       use_percent_text: 'Percent %',
       error: false,
       error_message: ''
@@ -117,7 +110,8 @@ export default {
         this.use_percent_text = 'Percent %'
         return
       }
-      this.use_percent_text = 'Ksh'
+      this.use_percent_text = 'Percent %'
+      // this.use_percent_text = 'Ksh'
     }
   },
   computed: {
@@ -135,6 +129,9 @@ export default {
     }
   },
   methods: {
+    addInvestment (investment) {
+      this.investments.push(investment)
+    },
     add_investment () {
       this.investments.push({
         type: '',

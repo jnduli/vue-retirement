@@ -7,24 +7,31 @@
       <section class="modal-card-body">
           <b-field  label="Name">
               <b-input
-                  type="text"
-                  :value="name"
-                  placeholder="Money Market Fund"
-                  required>
+                v-model="name"
+                type="text"
+                placeholder="Money Market Fund"
+                required>
               </b-input>
           </b-field>
 
-          <b-field  label="Monthly Contribution">
+          <b-field  label="Annual Interest in %">
             <b-input
+              v-model="interest"
               type="number"
-              :value="contribution"
-              placeholder="100000"
-              required>
+              placeholder="10" required>
+            </b-input>
+          </b-field>
+
+          <b-field  :label="label_contributions">
+            <b-input
+              v-model="contribution"
+              type="number"
+              placeholder="10" required>
             </b-input>
           </b-field>
 
           <b-field  label="Type of Interest">
-            <b-select>
+            <b-select v-model="interest_type" required>
               <option>Simple Interest</option>
               <option>Compound Interest</option>
             </b-select>
@@ -32,17 +39,55 @@
 
           <b-field  label="Initial amount in investment">
             <b-input
+              v-model="starting_amount"
               type="number"
-              :value="starting_amount"
               placeholder="100000"
               required>
             </b-input>
           </b-field>
       </section>
       <footer class="modal-card-foot">
-          <button class="button is-primary" type="button" @click="$parent.close()">Add</button>
+          <button class="button is-primary" type="button" @click="addInvestment">Add</button>
           <button class="button" type="button" @click="$parent.close()">Cancel</button>
       </footer>
   </div>
 </form>
 </template>
+
+<script>
+export default {
+  name: 'AddInvestmentModal',
+  props: ['usePercent'],
+  data () {
+    return {
+      name: '',
+      contribution: '',
+      interest_type: '',
+      starting_amount: 0,
+      interest: 0
+    }
+  },
+  computed: {
+    label_contributions: function () {
+      if (this.usePercent) {
+        return 'Contributions as % of income'
+      }
+      return 'Contributions in Ksh'
+    }
+  },
+  methods: {
+    addInvestment () {
+      const investment = {
+        type: this.name,
+        interest_type: this.interest_type,
+        interest: this.interest,
+        percentage: this.contribution,
+        distribution: '',
+        contribution: this.contribution
+      }
+      this.$emit('addInvestment', investment)
+      this.$parent.close()
+    }
+  }
+}
+</script>
