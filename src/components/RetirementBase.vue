@@ -50,10 +50,8 @@
             <add-investment-modal :use-percent='use_percent' v-on:addInvestment="addInvestment"></add-investment-modal>
         </b-modal>
           <button v-on:click="isAddInvestmentModalActive = true">Add</button>
-          <b-field grouped v-for="(invest, index) in investments" v-bind:key="index">
-            <investment-form :invest='invest' :index='index' :use_percent='use_percent' v-on:removeInvestment="removeInvestment"/>
-          </b-field>
         </div>
+        <investments-table :investments="investments"/>
       </div>
       <footer class="card-footer">
         <button v-on:click="calculatePeriods" class="card-footer-item">Calculate</button>
@@ -77,6 +75,7 @@
 import LineChart from '@/components/LineChart'
 import InvestmentForm from '@/components/InvestmentForm'
 import AddInvestmentModal from '@/components/AddInvestmentModal'
+import InvestmentsTable from '@/components/InvestmentsTable'
 import { calculateInvestmentPeriods } from '@/calculations/investments'
 
 export default {
@@ -84,7 +83,8 @@ export default {
   components: {
     LineChart,
     InvestmentForm,
-    AddInvestmentModal
+    AddInvestmentModal,
+    InvestmentsTable
   },
   data () {
     return {
