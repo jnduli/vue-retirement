@@ -24,13 +24,23 @@
 </template>
 
 <script>
+import AddInvestmentModal from '@/components/AddInvestmentModal'
+
 export default {
   name: 'InvestmentsTable',
-  props: ['investments'],
+  props: ['investments', 'usePercent'],
   methods: {
     edit (row) {
-      console.log('edit')
-      console.log(row)
+      this.$modal.open({
+        parent: this,
+        component: AddInvestmentModal,
+        props: {
+          usePercent: this.usePercent,
+          investment: row,
+          investments: this.investments,
+        },
+        hasModalCard: true
+      })
     },
     remove (row) {
       console.log('Clicked delete')
