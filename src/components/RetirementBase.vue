@@ -51,7 +51,11 @@
         </b-modal>
           <button v-on:click="isAddInvestmentModalActive = true">Add</button>
         </div>
-        <investments-table :investments="investments" v-on:remove-investment='removeInvestment'/>
+        <investments-table 
+                  :investments="investments" 
+                  :use-percent="fake_use_percent" 
+                  v-on:remove-investment='removeInvestment' 
+                  />
       </div>
       <footer class="card-footer">
         <button v-on:click="calculatePeriods" class="card-footer-item">Calculate</button>
