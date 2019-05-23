@@ -1,13 +1,13 @@
 <template>
-  <b-table :data="investments">
+  <b-table :data="investments" narrowed bordered>
     <template slot-scope="props">
       <b-table-column field="type" label="TYPE">{{ props.row.type }}</b-table-column>
-      <b-table-column field="interest_type" label="INTEREST TYPE">{{ props.row.interest_type }}</b-table-column>
-      <b-table-column field="percentage" label="% contribution" numeric>{{ props.row.percentage }}</b-table-column>
-      <b-table-column field="type">
+      <b-table-column field="interest_type" label="INTEREST TYPE">{{ props.row.interest_type }} @ {{ props.row.interest }}% / yr</b-table-column>
+      <b-table-column field="percentage" label="% of income">{{ props.row.percentage }}%</b-table-column>
+      <b-table-column>
         <button @click="edit(props.row)">Edit</button>
       </b-table-column>
-      <b-table-column field="type">
+      <b-table-column>
         <button @click="remove(props.row)">Delete</button>
       </b-table-column>
     </template>
