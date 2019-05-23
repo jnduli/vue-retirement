@@ -36,10 +36,13 @@ export default {
   methods: {
     getToolTipInvestment: function (toolTipData, index) {
       let text = '<div class="card">'
-      console.log(index)
       for (let i = 0; i < toolTipData.length; i += 1) {
         let el = toolTipData[i]
-        text = text + `<div>Investment ${i + 1}: ${Math.floor(el['principal'][index])}</div>`
+        if (el.interest_type === 'simple') {
+          text = text + `<div>${el['type']} : ${Math.floor(el['invest'] * index)}</div>`
+        } else if (el.interest_type === 'compound') {
+          text = text + `<div>${el['type']} : ${Math.floor(el['principal'][index])}</div>`
+        }
       }
       text = text + '</div>'
       return text

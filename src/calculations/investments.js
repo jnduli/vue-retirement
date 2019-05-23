@@ -87,23 +87,33 @@ export function calculateInvestmentPeriods (
 
   // this.investments is an array of investments made per month at a particular percentage
   // create array on monthlyinvestments, monthlyinterest and monthly principals
-  let monthlyInvestments = organizeCIMonthlyInvestments(ci.slice(), salary)
+  let ciMonthlyInvestments = organizeCIMonthlyInvestments(ci.slice(), salary)
   let profit = 0
   let month = 0
   while (profit <= retirementReached) {
-    monthlyInvestments = addCIMonthlyInvestments(monthlyInvestments)
-    profit = getCIMonthlyProfit(monthlyInvestments) + getSIMonthlyProfit(si, month)
+    ciMonthlyInvestments = addCIMonthlyInvestments(ciMonthlyInvestments)
+    profit = getCIMonthlyProfit(ciMonthlyInvestments) + getSIMonthlyProfit(si, month)
     month = month + 1
   }
-  // lineData should be sum of investments per month
-  const principals = monthlyInvestments.map((x) => x.principal)// + getSIAccumulatedAmount(si, month))
+  console.log(month)
 
-  let start = principals[0]
-  for (let i = 1; i < principals.length - 1; i += 1) {
-    start = start.map((num, index) => num + principals[i][index])
+  // lineData should be sum of investments per month
+  const ciPrincipals = ciMonthlyInvestments.map((x) => x.principal)// + getSIAccumulatedAmount(si, month))
+
+  let start = ciPrincipals[0] ? ciPrincipals[0] : 0
+  for (let i = 1; i < ciPrincipals.length - 1; i += 1) {
+    start = start.map((num, index) => num + ciPrincipals[i][index])
   }
 
-  start = start.map((num, month) => num + getSIAccumulatedAmount(si, month))
+  if (start == 0) {
+    start = []
+    for (let i = 0; i < month; i+=1) {
+      start.push(getSIAccumulatedAmount(si, i))
+    }
+  } else {
+    start = start.map((num, month) => num + getSIAccumulatedAmount(si, month))
+  }
+
 
   if (death > 0 && death < Infinity) {
     start = considerDeath(death, retirementReached, start)
@@ -113,6 +123,6 @@ export function calculateInvestmentPeriods (
   return {
     passed: true,
     data: start,
-    extras: monthlyInvestments
+    extras: [...ciMonthlyInvestments, ...si]
   }
 }

@@ -10,9 +10,10 @@
     "test:e2e": "vue-cli-service test:e2e"
   },
   "dependencies": {
-    "buefy": "^0.6.6",
+    "buefy": "^0.7.6",
     "d3": "^5.4.0",
-    "vue": "^2.5.16"
+    "vue": "^2.5.16",
+    "vue-router": "^3.0.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.0.0-beta.12",
