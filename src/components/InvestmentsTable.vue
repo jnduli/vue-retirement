@@ -4,19 +4,25 @@
       <b-table-column field="type" label="TYPE">{{ props.row.type }}</b-table-column>
       <b-table-column field="interest_type" label="INTEREST TYPE">{{ props.row.interest_type }} @ {{ props.row.interest }}% / yr</b-table-column>
       <b-table-column field="percentage" label="% of income">{{ props.row.percentage }}%</b-table-column>
-      <b-table-column>
+      <b-table-column custome-key="Edit">
         <button @click="edit(props.row)">Edit</button>
       </b-table-column>
-      <b-table-column>
+      <b-table-column custom-key="Delete">
         <button @click="remove(props.row)">Delete</button>
       </b-table-column>
+    </template>
+
+    <template slot="footer">
+      <div class="has-text-right">
+        Total Investments: {{ this.investments.length }}
+      </div>
     </template>
 
     <template slot="empty">
       <section class="section">
         <div class="content has-text-grey has-text-centered">
           <p><b-icon icon="emoticon-sad" size="is-large"></b-icon></p>
-          <p>Nothing here.</p>
+          <p>No investments added yet.</p>
         </div>
       </section>
     </template>
@@ -37,13 +43,12 @@ export default {
         props: {
           usePercent: this.usePercent,
           investment: row,
-          investments: this.investments,
+          investments: this.investments
         },
         hasModalCard: true
       })
     },
     remove (row) {
-      console.log('Clicked delete')
       const index = this.investments.indexOf(row)
       this.$emit('remove-investment', index)
     }
