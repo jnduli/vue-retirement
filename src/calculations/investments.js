@@ -95,7 +95,7 @@ export function calculateInvestmentPeriods (
     profit = getCIMonthlyProfit(ciMonthlyInvestments) + getSIMonthlyProfit(si, month)
     month = month + 1
   }
-  console.log(month)
+  month = month - 1
 
   // lineData should be sum of investments per month
   const ciPrincipals = ciMonthlyInvestments.map((x) => x.principal)// + getSIAccumulatedAmount(si, month))
