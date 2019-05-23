@@ -26,6 +26,11 @@
     </b-field>
     <b-field class="column is-narrow" label="remove">
       <button class="button" @click="$emit('removeInvestment',index)">
+        More Info
+      </button>
+    </b-field>
+    <b-field class="column is-narrow" label="remove">
+      <button class="button" @click="$emit('removeInvestment',index)">
         Remove
       </button>
     </b-field>
