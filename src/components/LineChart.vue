@@ -36,6 +36,9 @@ export default {
   methods: {
     getToolTipInvestment: function (toolTipData, index) {
       let text = '<div class="card">'
+      if (index > this.line_data.length - 1) {
+        index = this.line_data.length - 1
+      }
       for (let i = 0; i < toolTipData.length; i += 1) {
         let el = toolTipData[i]
         if (el.interest_type === 'simple') {
@@ -50,7 +53,7 @@ export default {
     calculatePath () {
       const data = this.line_data.map((cur, idx) => ({ y: cur, x: idx }))
       const dotStep = 10
-      const dotData = data.filter((elem, index) => (index % dotStep === 0))
+      const dotData = data.filter((elem, index) => (index % dotStep === 0) || (index === data.length - 1))
       const margin = {
         top: 40,
         right: 40,
@@ -122,7 +125,6 @@ export default {
         .attr('class', 'axis axis--x')
         .attr('transform', `translate(0, ${height})`)
         .call(d3.axisBottom(x))
-      console.log(`Somthing ${height}`)
 
       svg.append('text')
         .attr('transform', `translate(${width / 2}, ${height + margin.top + 10})`)
