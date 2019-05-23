@@ -13,45 +13,67 @@
             </b-switch>
           </b-field>
 
-          <b-field grouped>
-            <b-field label="Income (Monthly)">
-              <b-tooltip label="How much you earn per month" class="control" multilined>
-                <button class="button">?</button>
-              </b-tooltip>
-              <b-input v-model="salary" type="number" step="any"></b-input>
-            </b-field>
-            <b-field label="Expected Years">
-              <b-field class="control">
-              <b-tooltip label="How many years from now do you expect the fund to last for" class="control" multilined>
-                <button class="button">?</button>
-              </b-tooltip>
+          <div class="columns">
+            <div class="column">
+              <b-field>
+                <template slot="label">
+                  Income (Monthly)
+                  <b-tooltip type="is-dark" size="is-small" class="button is-outlined" label="How much you earn per month">
+                    ?
+                  </b-tooltip>
+                </template>
+                <b-input v-model="salary" type="number" step="any"></b-input>
+                <p class="control">
+                  <span class="button is-static">Ksh</span>
+                </p>
               </b-field>
-              <b-input v-model="death" type="number" step="any"></b-input>
-            </b-field>
-          </b-field>
+            </div>
+            <div class="column">
+              <b-field>
+                <template slot="label">
+                  Expected Years
+                  <b-tooltip type="is-dark" size="is-small" class="button is-outlined" label="How many years from now do you expect the fund to last for. If left blank, assumed years is infinity" multilined>
+                    ?
+                  </b-tooltip>
+                </template>
+                <b-input v-model="death" type="number" step="any" placeholder="Infinity"></b-input>
+                <p class="control">
+                  <span class="button is-static">yrs</span>
+                </p>
+              </b-field>
+            </div>
+          </div>
 
-          <b-field grouped>
-            <b-field label="Monthly Expenses">
-              <b-tooltip label="How much do you spend per month? This can be a percentage of the income or an actual value" class="control" multilined>
-                <button class="button">?</button>
-              </b-tooltip>
-              <b-input v-model="expenses" type="number" step="any"></b-input>
-              <p class="control">
-                <span class="button is-static">%</span>
-              </p>
-            </b-field>
-            <b-field label="Retirement Expenses">
-              <b-tooltip label="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value" class="control" multilined>
-                <button class="button">?</button>
-              </b-tooltip>
-              <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
-              <p class="control">
-                <span class="button is-static">%</span>
-              </p>
-            </b-field>
-          </b-field>
-
-
+          <div class="columns">
+            <div class="column">
+              <b-field>
+                <template slot="label">
+                  Monthly Expenses
+                  <b-tooltip type="is-dark" size="is-small" class="button is-outlined" label="How much do you spend per month? This can be a percentage of the income or an actual value" multilined>
+                    ?
+                  </b-tooltip>
+                </template>
+                <b-input v-model="expenses" type="number" step="any"></b-input>
+                <p class="control">
+                  <span class="button is-static">%</span>
+                </p>
+              </b-field>
+            </div>
+            <div class="column">
+              <b-field label="Retirement Expenses">
+                <template slot="label">
+                  Retirement Expenses
+                  <b-tooltip type="is-dark" size="is-small" class="button is-outlined" label="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value" multilined>
+                    ?
+                  </b-tooltip>
+                </template>
+                <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
+                <p class="control">
+                  <span class="button is-static">%</span>
+                </p>
+              </b-field>
+            </div>
+          </div>
 
           Add select form on investments made
         <b-modal :active.sync="isAddInvestmentModalActive" has-modal-card>
