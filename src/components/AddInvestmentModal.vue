@@ -18,7 +18,11 @@
           </b-field>
 
           <b-field  label="Type of Interest">
-            <b-select v-model="interest_type" required> <option>Simple Interest</option> <option>Compound Interest</option></b-select>
+            <b-select v-model="interest_type" required>
+              <option value="simple">Simple Interest</option>
+              <option value="compound">Compound Interest</option>
+              <option value="none">No Interest</option>
+            </b-select>
           </b-field>
 
           <b-field  label="Initial amount in investment">
