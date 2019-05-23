@@ -7,6 +7,7 @@ export function organizeSIMonthlyInvestments (investments, salary) {
       accumulatedInterest: 0,
       interest_type: invest.interest_type,
       type: invest.type,
+      starting_amount: invest.starting_amount * 1,
       profit: [0]
     }
     return monthly
@@ -14,11 +15,11 @@ export function organizeSIMonthlyInvestments (investments, salary) {
 }
 
 function individualInvestCalculations (x, month) {
-  const principal = month * x.invest
+  const principal = (month * x.invest) + x.starting_amount
   const profit = x.interest * principal
   // create array of months ie. [1, 2, 3 ... month]
   const months = Array.from({length: month}, (val, index) => index + 1)
-  const accumulatedInterest = months.reduce((acc, cur) => acc + (cur * x.invest * x.interest), 0)
+  const accumulatedInterest = months.reduce((acc, cur) => acc + ((cur * x.invest + x.starting_amount) * x.interest), 0)
   return {
     principal: principal,
     profit: profit,
