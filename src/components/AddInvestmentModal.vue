@@ -45,8 +45,8 @@ export default {
   data () {
     return {
       name: '',
-      contribution: '',
-      interest_type: '',
+      contribution: 0,
+      interest_type: 'simple',
       starting_amount: 0,
       interest: 0,
       index: 0
@@ -70,7 +70,20 @@ export default {
     }
   },
   methods: {
+    validateForm () {
+      if (this.name && this.contribution) {
+        return true
+      }
+      this.$toast.open({
+        message: 'Inputs are invalid: name has to be set and contribution > 0',
+        type: 'is-danger'
+      })
+      return false
+    },
     addInvestment () {
+      if (!this.validateForm()) {
+        return
+      }
       const investment = {
         type: this.name,
         interest_type: this.interest_type,
@@ -83,6 +96,9 @@ export default {
       this.$parent.close()
     },
     editInvestment () {
+      if (!this.validateForm()) {
+        return
+      }
       const investment = {
         type: this.name,
         interest_type: this.interest_type,
