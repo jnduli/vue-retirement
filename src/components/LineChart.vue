@@ -42,7 +42,7 @@ export default {
       for (let i = 0; i < toolTipData.length; i += 1) {
         let el = toolTipData[i]
         if (el.interest_type === 'simple') {
-          text = text + `<div>${el['type']} : ${Math.floor(el['invest'] * index)}</div>`
+          text = text + `<div>${el['type']} : ${Math.floor(el['starting_amount'] + el['invest'] * index)}</div>`
         } else if (el.interest_type === 'compound') {
           text = text + `<div>${el['type']} : ${Math.floor(el['principal'][index])}</div>`
         }
