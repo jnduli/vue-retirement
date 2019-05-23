@@ -180,6 +180,9 @@ export default {
     },
     calculatePeriods () {
       this.resetCalculations()
+      if (this.death === 0 || this.death === null) {
+        this.death = Infinity
+      }
       const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses, this.retirement_expenses, this.use_percent, this.death)
       const passed = result.passed
       if (!passed) {

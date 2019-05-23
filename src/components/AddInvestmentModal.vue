@@ -45,8 +45,8 @@ export default {
   data () {
     return {
       name: '',
-      contribution: '',
-      interest_type: '',
+      contribution: 0,
+      interest_type: 'simple',
       starting_amount: 0,
       interest: 0,
       index: 0
@@ -59,6 +59,7 @@ export default {
       this.interest = this.investment.interest
       this.contribution = this.investment.percentage
       this.index = this.investments.indexOf(this.investment)
+      this.starting_amount = this.investment.starting_amount
     }
   },
   computed: {
@@ -70,26 +71,44 @@ export default {
     }
   },
   methods: {
+    validateForm () {
+      if (this.name && this.contribution && (this.starting_amount >= 0)) {
+        return true
+      }
+      this.$toast.open({
+        message: 'Inputs are invalid: name  and starting amount have to be set and contribution > 0',
+        type: 'is-danger'
+      })
+      return false
+    },
     addInvestment () {
+      if (!this.validateForm()) {
+        return
+      }
       const investment = {
         type: this.name,
         interest_type: this.interest_type,
         interest: this.interest,
         percentage: this.contribution,
         distribution: '',
-        contribution: this.contribution
+        contribution: this.contribution,
+        starting_amount: this.starting_amount
       }
       this.$emit('addInvestment', investment)
       this.$parent.close()
     },
     editInvestment () {
+      if (!this.validateForm()) {
+        return
+      }
       const investment = {
         type: this.name,
         interest_type: this.interest_type,
         interest: this.interest,
         percentage: this.contribution,
         distribution: '',
-        contribution: this.contribution
+        contribution: this.contribution,
+        starting_amount: this.starting_amount
       }
       this.investments.splice(this.index, 1, investment)
       this.$parent.close()

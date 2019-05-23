@@ -83,6 +83,7 @@ export function calculateInvestmentPeriods (
   // do this because logic for no_interest has not been implemented
   // ci.push(ni)
 
+  console.log(ci)
   si = organizeSIMonthlyInvestments(si.slice(), salary)
 
   // this.investments is an array of investments made per month at a particular percentage
@@ -95,7 +96,7 @@ export function calculateInvestmentPeriods (
     profit = getCIMonthlyProfit(ciMonthlyInvestments) + getSIMonthlyProfit(si, month)
     month = month + 1
   }
-  console.log(month)
+  // month = month - 1
 
   // lineData should be sum of investments per month
   const ciPrincipals = ciMonthlyInvestments.map((x) => x.principal)// + getSIAccumulatedAmount(si, month))
@@ -118,7 +119,6 @@ export function calculateInvestmentPeriods (
   if (death > 0 && death < Infinity) {
     start = considerDeath(death, retirementReached, start)
   }
-  // TODO: extras does not include simple interest amounts
 
   return {
     passed: true,
