@@ -1,7 +1,10 @@
 <template>
   <div class="container">
     <div class="card">
-      <p class="card-header-title">Income Options</p>
+      <header class="card-header">
+        <p class="card-header-title">Income Options</p>
+        <router-link class="button" to="/">X</router-link>
+      </header>
       <div class="card-content">
         <div class="content">
           <b-field horizontal label="Input % for inputs">
@@ -9,7 +12,6 @@
               {{ use_percent_text }}
             </b-switch>
           </b-field>
-
 
           <b-field grouped>
             <b-field label="Income (Monthly)">
@@ -34,12 +36,18 @@
                 <button class="button">?</button>
               </b-tooltip>
               <b-input v-model="expenses" type="number" step="any"></b-input>
+              <p class="control">
+                <span class="button is-static">%</span>
+              </p>
             </b-field>
             <b-field label="Retirement Expenses">
               <b-tooltip label="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value" class="control" multilined>
                 <button class="button">?</button>
               </b-tooltip>
               <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
+              <p class="control">
+                <span class="button is-static">%</span>
+              </p>
             </b-field>
           </b-field>
 
