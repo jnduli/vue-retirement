@@ -59,6 +59,7 @@ export default {
       this.interest = this.investment.interest
       this.contribution = this.investment.percentage
       this.index = this.investments.indexOf(this.investment)
+      this.starting_amount = this.investment.starting_amount
     }
   },
   computed: {
@@ -71,11 +72,11 @@ export default {
   },
   methods: {
     validateForm () {
-      if (this.name && this.contribution) {
+      if (this.name && this.contribution && (this.starting_amount >= 0)) {
         return true
       }
       this.$toast.open({
-        message: 'Inputs are invalid: name has to be set and contribution > 0',
+        message: 'Inputs are invalid: name  and starting amount have to be set and contribution > 0',
         type: 'is-danger'
       })
       return false
@@ -90,7 +91,8 @@ export default {
         interest: this.interest,
         percentage: this.contribution,
         distribution: '',
-        contribution: this.contribution
+        contribution: this.contribution,
+        starting_amount: this.starting_amount
       }
       this.$emit('addInvestment', investment)
       this.$parent.close()
@@ -105,7 +107,8 @@ export default {
         interest: this.interest,
         percentage: this.contribution,
         distribution: '',
-        contribution: this.contribution
+        contribution: this.contribution,
+        starting_amount: this.starting_amount
       }
       this.investments.splice(this.index, 1, investment)
       this.$parent.close()
