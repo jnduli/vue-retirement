@@ -4,6 +4,8 @@ export function organizeCIMonthlyInvestments (investments, salary) {
       invest: (invest.percentage * salary) / 100,
       interest: (invest.interest / 1200),
       principal: [0],
+      interest_type: invest.interest_type,
+      type: invest.type,
       profit: [0]
     }
     return monthly
