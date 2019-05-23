@@ -3,7 +3,7 @@ export function organizeCIMonthlyInvestments (investments, salary) {
     const monthly = {
       invest: (invest.percentage * salary) / 100,
       interest: (invest.interest / 1200),
-      principal: [invest.starting_amount],
+      principal: [invest.starting_amount * 1],
       interest_type: invest.interest_type,
       type: invest.type,
       profit: [0]
