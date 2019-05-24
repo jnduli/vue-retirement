@@ -79,7 +79,7 @@
         <b-modal :active.sync="isAddInvestmentModalActive" has-modal-card>
             <add-investment-modal :use-percent='use_percent' v-on:addInvestment="addInvestment"></add-investment-modal>
         </b-modal>
-          <button v-on:click="isAddInvestmentModalActive = true">Add</button>
+          <button id="add-investment" v-on:click="isAddInvestmentModalActive = true">Add</button>
         </div>
         <investments-table 
                   :investments="investments" 
