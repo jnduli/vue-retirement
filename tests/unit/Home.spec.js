@@ -1,6 +1,5 @@
 import { RouterLinkStub, mount, shallowMount } from '@vue/test-utils'
 import Home from '@/components/Home.vue'
-import RetirementBase from '@/components/RetirementBase.vue'
 
 describe('Home Page', () => {
   it('renders explanation message', () => {

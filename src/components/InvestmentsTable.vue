@@ -4,7 +4,7 @@
       <b-table-column field="type" label="TYPE">{{ props.row.type }}</b-table-column>
       <b-table-column field="interest_type" label="INTEREST TYPE">{{ props.row.interest_type }} @ {{ props.row.interest }}% / yr</b-table-column>
       <b-table-column field="percentage" label="% of income">{{ props.row.percentage }}%</b-table-column>
-      <b-table-column custome-key="Edit">
+      <b-table-column custom-key="Edit">
         <button @click="edit(props.row)">Edit</button>
       </b-table-column>
       <b-table-column custom-key="Delete">

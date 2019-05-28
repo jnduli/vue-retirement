@@ -1,37 +1,33 @@
 import { mount, createLocalVue } from '@vue/test-utils'
 import Buefy from 'buefy'
+import VueRouter from 'vue-router'
+
 import RetirementBase from '@/components/RetirementBase.vue'
+import router from '@/routes'
 
 const localVue = createLocalVue()
 localVue.use(Buefy)
+localVue.use(VueRouter)
 
 describe('Retirement Base', () => {
   it('renders income section properly', () => {
     const wrapper = mount(RetirementBase, {
-      localVue
+      localVue,
+      router
     })
-    expect(wrapper.text()).toContain('Choose between % or Ksh')
     expect(wrapper.text()).toContain('Income')
     expect(wrapper.text()).toContain('Expected Years')
     expect(wrapper.text()).toContain('Retirement Expenses')
     expect(wrapper.text()).toContain('Monthly Expenses')
   })
 
-  it('can display added investment', () => {
-    const investments = [
-      {
-        type: 'Bank Savings Account',
-        interest_type: 'simple',
-        interest: 10.00,
-        distribution: '',
-        percentage: 57
-      }
-    ]
+  it('shows add invesment form', () => {
     const wrapper = mount(RetirementBase, {
-      localVue
+      localVue,
+      router
     })
-    // console.log(wrapper.vm.$data)
-    // wrapper.setData({ investments: investments })
-    expect(wrapper.text()).toContain('57')
+    const add = wrapper.find('#add-investment')
+    add.trigger('click')
+    expect(wrapper.vm.isAddInvestmentModalActive).toBe(true)
   })
 })
