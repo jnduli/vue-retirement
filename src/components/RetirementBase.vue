@@ -55,7 +55,7 @@
                 </template>
                 <b-input v-model="expenses" type="number" step="any"></b-input>
                 <p class="control">
-                  <span class="button is-static">%</span>
+                <button class="button is-primary" @click='changeExpensesUnit'>{{ expenses_unit }}</button>
                 </p>
               </b-field>
             </div>
@@ -125,6 +125,7 @@ export default {
       isAddInvestmentModalActive: false,
       salary: 10000,
       expenses: 50,
+      expenses_unit: '%',
       death: Infinity,
       retirement_expenses: 60,
       investments: [],
@@ -163,6 +164,9 @@ export default {
     }
   },
   methods: {
+    changeExpensesUnit () {
+      this.expenses_unit = 'Ksh'
+    },
     addInvestment (investment) {
       this.investments.push(investment)
     },
