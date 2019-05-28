@@ -31,8 +31,8 @@
         </section>
         <footer class="modal-card-foot">
             <button id="add" v-if="investment == null" class="button is-primary" type="button" @click="addInvestment">Add</button>
-            <button v-else class="button is-primary" type="button" @click="editInvestment">Edit</button>
-            <button class="button" type="button" @click="$parent.close()">Cancel</button>
+            <button v-else id="edit" class="button is-primary" type="button" @click="editInvestment">Edit</button>
+            <button id="cancel" class="button" type="button" @click="$parent.close()">Cancel</button>
         </footer>
   </div>
 </form>
