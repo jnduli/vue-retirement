@@ -8,13 +8,15 @@ describe('CompoundInterest Calculations', () => {
         interest_type: 'compound',
         interest: 10.00,
         distribution: 'constant',
-        percentage: 10
+        percentage: 10,
+        starting_amount: 0
       }, {
         type: 'randomThing',
         interest_type: 'compound',
         interest: 15.00,
         distribution: 'constant',
-        percentage: 20
+        percentage: 20,
+        starting_amount: 1000
       }
     ]
 
@@ -24,11 +26,16 @@ describe('CompoundInterest Calculations', () => {
         invest: (10.0 * salary) / 100,
         interest: 10.0 / 1200,
         principal: [0],
+        interest_type: 'compound',
+        type: 'random',
         profit: [0]
       }, {
         invest: (20 * salary) / 100,
         interest: 15 / 1200,
-        principal: [0],
+        principal: [1000],
+        profit: [0],
+        interest_type: 'compound',
+        type: 'randomThing',
         profit: [0]
       }
     ]
