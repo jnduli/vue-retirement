@@ -26,21 +26,16 @@ function considerDeath (death, retirementExpenses, start) {
   return start
 }
 
-function getInvestmentParameters (investments, salary, expenses, retirementExpenses, usePercent = true) {
-  if (!usePercent) {
-    retirementExpenses = parseInt(retirementExpenses) / salary * 100
-    expenses = parseInt(expenses) / salary * 100
-    investments = investments.map(obj => {
-      obj.percentage = (obj.percentage / salary) * 100
-      return obj
-    })
-    return [retirementExpenses, expenses, investments]
-  }
+function getInvestmentParameters (investments, salary, expenses, retirementExpenses) {
+  investments = investments.map(obj => {
+    obj.percentage = obj.contribution.percent
+    return obj
+  })
   return [retirementExpenses, expenses, investments]
 }
 
 export function calculateInvestmentPeriods (
-  investments, salary, expenses, retirementExpenses, usePercent = true, death = Infinity
+  investments, salary, expenses, retirementExpenses, death = Infinity
 ) {
   if (investments.length <= 0) {
     return {
@@ -49,7 +44,7 @@ export function calculateInvestmentPeriods (
     }
   }
 
-  [retirementExpenses, expenses, investments] = getInvestmentParameters(investments, salary, expenses, retirementExpenses, usePercent)
+  [retirementExpenses, expenses, investments] = getInvestmentParameters(investments, salary, expenses, retirementExpenses)
 
   const retirementReached = retirementExpenses * salary / 100
   // check that percentages add up to at most 100
