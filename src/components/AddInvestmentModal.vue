@@ -15,7 +15,7 @@
 
           <unit-conversion-input
             label="Contribution"
-            tooltip="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value"
+            tooltip="How much do you think you'll be able to provide per month to this investment? It can be a percentage of your salary or an actual value"
             :fractional-money="contribution"
             :main-money="salary"
             ></unit-conversion-input>
@@ -72,14 +72,6 @@ export default {
       this.contribution = this.investment.contribution
       this.index = this.investments.indexOf(this.investment)
       this.starting_amount = this.investment.starting_amount
-    }
-  },
-  computed: {
-    label_contributions: function () {
-      if (this.usePercent) {
-        return 'Contributions as % of income'
-      }
-      return 'Contributions in Ksh'
     }
   },
   methods: {
