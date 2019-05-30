@@ -13,9 +13,12 @@
             <b-input v-model="interest" type="number" placeholder="10" required></b-input>
           </b-field>
 
-          <b-field  :label="label_contributions">
-            <b-input v-model="contribution" type="number" placeholder="10" required></b-input>
-          </b-field>
+          <unit-conversion-input
+            label="Contribution"
+            tooltip="How much do you think you'll be able to provide per month to this investment? It can be a percentage of your salary or an actual value"
+            :fractional-money="contribution"
+            :main-money="salary"
+            ></unit-conversion-input>
 
           <b-field  label="Type of Interest">
             <b-select v-model="interest_type" required>
@@ -39,13 +42,22 @@
 </template>
 
 <script>
+import UnitConversionInput from '@/components/UnitConversionInput'
+
 export default {
   name: 'AddInvestmentModal',
-  props: ['usePercent', 'investment', 'investments'],
+  components: {
+    UnitConversionInput
+  },
+  props: ['investment', 'investments', 'salary'],
   data () {
     return {
       name: '',
-      contribution: 0,
+      contribution: {
+        percent: 0,
+        currency: 0,
+        use_percent: false
+      },
       interest_type: 'simple',
       starting_amount: 0,
       interest: 0,
@@ -57,17 +69,9 @@ export default {
       this.name = this.investment.type
       this.interest_type = this.investment.interest_type
       this.interest = this.investment.interest
-      this.contribution = this.investment.percentage
+      this.contribution = this.investment.contribution
       this.index = this.investments.indexOf(this.investment)
       this.starting_amount = this.investment.starting_amount
-    }
-  },
-  computed: {
-    label_contributions: function () {
-      if (this.usePercent) {
-        return 'Contributions as % of income'
-      }
-      return 'Contributions in Ksh'
     }
   },
   methods: {
@@ -89,8 +93,6 @@ export default {
         type: this.name,
         interest_type: this.interest_type,
         interest: this.interest,
-        percentage: this.contribution,
-        distribution: '',
         contribution: this.contribution,
         starting_amount: this.starting_amount
       }
@@ -105,8 +107,6 @@ export default {
         type: this.name,
         interest_type: this.interest_type,
         interest: this.interest,
-        percentage: this.contribution,
-        distribution: '',
         contribution: this.contribution,
         starting_amount: this.starting_amount
       }
