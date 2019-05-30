@@ -49,7 +49,7 @@ export default {
   components: {
     UnitConversionInput
   },
-  props: ['usePercent', 'investment', 'investments', 'salary'],
+  props: ['investment', 'investments', 'salary'],
   data () {
     return {
       name: '',
