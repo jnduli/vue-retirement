@@ -7,12 +7,6 @@
       </header>
       <div class="card-content">
         <div class="content">
-          <b-field horizontal label="Input % for inputs">
-            <b-switch v-model="fake_use_percent">
-              {{ use_percent_text }}
-            </b-switch>
-          </b-field>
-
           <div class="columns">
             <div class="column">
               <b-field>
@@ -65,7 +59,7 @@
 
           Add select form on investments made
         <b-modal :active.sync="isAddInvestmentModalActive" has-modal-card>
-            <add-investment-modal :use-percent='use_percent' v-on:addInvestment="addInvestment"></add-investment-modal>
+            <add-investment-modal :use-percent='use_percent' v-on:addInvestment="addInvestment" :salary="salary"></add-investment-modal>
         </b-modal>
           <button id="add-investment" v-on:click="isAddInvestmentModalActive = true">Add</button>
         </div>
