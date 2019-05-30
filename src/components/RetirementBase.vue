@@ -52,25 +52,14 @@
                   :fractional-money="expenses"
                   :main-money="salary"
                   ></unit-conversion-input>
-                <!-- <b-input v-if="expenses.use_percent" v-model="expenses.percent" type="number" step="any"></b-input> -->
-                <!-- <b-input v-else v-model="expenses.currency" type="number" step="any"></b-input> -->
-                <!-- <p class="control"> -->
-                <!-- <button class="button is-primary" @click='changeExpensesUnit'>{{ label_expenses_unit }}</button> -->
-                <!-- </p> -->
             </div>
             <div class="column">
-              <b-field label="Retirement Expenses">
-                <template slot="label">
-                  Retirement Expenses
-                  <b-tooltip type="is-dark" size="is-small" class="button is-outlined" label="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value" multilined>
-                    ?
-                  </b-tooltip>
-                </template>
-                <b-input v-model="retirement_expenses" type="number" step="any"></b-input>
-                <p class="control">
-                  <span class="button is-static">%</span>
-                </p>
-              </b-field>
+              <unit-conversion-input
+                label="Retirement Expenses"
+                tooltip="How much do you think you'll spend per month after retirement? This should typically be less that the monthly expenses. This can be a percentage of current income or an actual value"
+                :fractional-money="retirement_expenses"
+                :main-money="salary"
+                ></unit-conversion-input>
             </div>
           </div>
 
@@ -130,10 +119,14 @@ export default {
         currency: 0,
         use_percent: true
       },
+      retirement_expenses: {
+        percent: 0,
+        currency: 0,
+        use_percent: true
+      },
       // expenses: 50,
       expenses_unit: '%',
       death: Infinity,
-      retirement_expenses: 60,
       investments: [],
       lineData: [],
       toolTipData: [],
@@ -205,7 +198,7 @@ export default {
       if (this.death === 0 || this.death === null) {
         this.death = Infinity
       }
-      const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses, this.retirement_expenses, this.use_percent, this.death)
+      const result = calculateInvestmentPeriods(JSON.parse(JSON.stringify(this.investments)), this.salary, this.expenses.percent, this.retirement_expenses.percent, true, this.death)
       const passed = result.passed
       if (!passed) {
         this.error = true
