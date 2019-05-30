@@ -46,18 +46,17 @@
 
           <div class="columns">
             <div class="column">
-              <b-field>
-                <template slot="label">
-                  Monthly Expenses
-                  <b-tooltip type="is-dark" size="is-small" class="button is-outlined" label="How much do you spend per month? This can be a percentage of the income or an actual value" multilined>
-                    ?
-                  </b-tooltip>
-                </template>
-                <b-input v-model="expenses" type="number" step="any"></b-input>
-                <p class="control">
-                <button class="button is-primary" @click='changeExpensesUnit'>{{ expenses_unit }}</button>
-                </p>
-              </b-field>
+                <unit-conversion-input
+                  label="Monthly Expenses"
+                  tooltip="How much do you spend per month? This can be a percentage of the income or an actual value"
+                  :fractional-money="expenses"
+                  :main-money="salary"
+                  ></unit-conversion-input>
+                <!-- <b-input v-if="expenses.use_percent" v-model="expenses.percent" type="number" step="any"></b-input> -->
+                <!-- <b-input v-else v-model="expenses.currency" type="number" step="any"></b-input> -->
+                <!-- <p class="control"> -->
+                <!-- <button class="button is-primary" @click='changeExpensesUnit'>{{ label_expenses_unit }}</button> -->
+                <!-- </p> -->
             </div>
             <div class="column">
               <b-field label="Retirement Expenses">
@@ -81,10 +80,10 @@
         </b-modal>
           <button id="add-investment" v-on:click="isAddInvestmentModalActive = true">Add</button>
         </div>
-        <investments-table 
-                  :investments="investments" 
-                  :use-percent="fake_use_percent" 
-                  v-on:remove-investment='removeInvestment' 
+        <investments-table
+                  :investments="investments"
+                  :use-percent="fake_use_percent"
+                  v-on:remove-investment='removeInvestment'
                   />
       </div>
       <footer class="card-footer">
@@ -110,6 +109,7 @@ import LineChart from '@/components/LineChart'
 import InvestmentForm from '@/components/InvestmentForm'
 import AddInvestmentModal from '@/components/AddInvestmentModal'
 import InvestmentsTable from '@/components/InvestmentsTable'
+import UnitConversionInput from '@/components/UnitConversionInput'
 import { calculateInvestmentPeriods } from '@/calculations/investments'
 
 export default {
@@ -118,13 +118,19 @@ export default {
     LineChart,
     InvestmentForm,
     AddInvestmentModal,
-    InvestmentsTable
+    InvestmentsTable,
+    UnitConversionInput
   },
   data () {
     return {
       isAddInvestmentModalActive: false,
       salary: 10000,
-      expenses: 50,
+      expenses: {
+        percent: 0,
+        currency: 0,
+        use_percent: true
+      },
+      // expenses: 50,
       expenses_unit: '%',
       death: Infinity,
       retirement_expenses: 60,
@@ -150,6 +156,12 @@ export default {
     }
   },
   computed: {
+    label_expenses_unit: function () {
+      if (this.expenses.use_percent) {
+        return '%'
+      }
+      return 'Ksh'
+    },
     label_monthly: function () {
       if (this.use_percent) {
         return '% used on Monthly Expenditure'
@@ -165,7 +177,13 @@ export default {
   },
   methods: {
     changeExpensesUnit () {
-      this.expenses_unit = 'Ksh'
+      // if it was showing use_percent, change value to correct number
+      if (this.expenses.use_percent) {
+        this.expenses.currency = this.expenses.percent * this.salary / 100
+      } else {
+        this.expenses.percent = this.expenses.currency * 100 / this.salary
+      }
+      this.expenses.use_percent = !this.expenses.use_percent
     },
     addInvestment (investment) {
       this.investments.push(investment)
