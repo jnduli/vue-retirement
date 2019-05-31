@@ -3,6 +3,7 @@
     <div class="card">
       <header class="card-header">
         <p class="card-header-title">Income Options</p>
+        <button v-on:click="saveInvestments">Save</button>
         <router-link class="button" to="/">X</router-link>
       </header>
       <div class="card-content">
@@ -102,6 +103,18 @@ export default {
     InvestmentsTable,
     UnitConversionInput
   },
+  created: function () {
+    const salary = localStorage.getItem('salary')
+    this.salary = salary || this.salary
+    const death = localStorage.getItem('death')
+    this.death = death || this.death
+    const expenses = JSON.parse(localStorage.getItem('expenses'))
+    this.expenses = expenses || this.expenses
+    const retirementExpenses = JSON.parse(localStorage.getItem('retirement_expenses'))
+    this.retirement_expenses = retirementExpenses || this.retirement_expenses
+    const investments = JSON.parse(localStorage.getItem('investments'))
+    this.investments = investments || this.investments
+  },
   data () {
     return {
       isAddInvestmentModalActive: false,
@@ -155,6 +168,13 @@ export default {
       this.lineData = []
       this.toolTipData = []
       this.error = false
+    },
+    saveInvestments () {
+      localStorage.setItem('salary', this.salary)
+      localStorage.setItem('death', this.death)
+      localStorage.setItem('expenses', JSON.stringify(this.expenses))
+      localStorage.setItem('retirement_expenses', JSON.stringify(this.retirement_expenses))
+      localStorage.setItem('investments', JSON.stringify(this.investments))
     }
   }
 }
