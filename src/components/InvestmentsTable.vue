@@ -3,8 +3,10 @@
     <template slot-scope="props">
       <b-table-column field="type" label="TYPE">{{ props.row.type }}</b-table-column>
       <b-table-column field="interest_type" label="INTEREST TYPE">{{ props.row.interest_type }} @ {{ props.row.interest }}% / yr</b-table-column>
-      <b-table-column field="percentage" label="% of income">{{ props.row.percentage }}%</b-table-column>
-      <b-table-column custome-key="Edit">
+      <b-table-column field="percentage" label="% of income">{{ props.row.contribution.percent }}%</b-table-column>
+
+      <b-table-column field="contribution" label="Ksh contribution">Ksh {{ props.row.contribution.currency }}</b-table-column>
+      <b-table-column custom-key="Edit">
         <button @click="edit(props.row)">Edit</button>
       </b-table-column>
       <b-table-column custom-key="Delete">
@@ -34,16 +36,16 @@ import AddInvestmentModal from '@/components/AddInvestmentModal'
 
 export default {
   name: 'InvestmentsTable',
-  props: ['investments', 'usePercent'],
+  props: ['investments', 'salary'],
   methods: {
     edit (row) {
       this.$modal.open({
         parent: this,
         component: AddInvestmentModal,
         props: {
-          usePercent: this.usePercent,
           investment: row,
-          investments: this.investments
+          investments: this.investments,
+          salary: this.salary
         },
         hasModalCard: true
       })

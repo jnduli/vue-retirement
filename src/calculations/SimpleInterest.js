@@ -7,7 +7,7 @@ export function organizeSIMonthlyInvestments (investments, salary) {
       accumulatedInterest: 0,
       interest_type: invest.interest_type,
       type: invest.type,
-      starting_amount: invest.starting_amount * 1,
+      starting_amount: Number(invest.starting_amount),
       profit: [0]
     }
     return monthly
