@@ -103,6 +103,17 @@ export default {
     InvestmentsTable,
     UnitConversionInput
   },
+  watch: {
+    salary: function (newSalary, oldSalary) {
+      // update expenses using percentage
+      this.expenses.currency = newSalary * this.expenses.percent / 100
+      this.retirement_expenses.currency = newSalary * this.retirement_expenses.percent / 100
+      this.investments = this.investments.map((investment) => {
+        investment.contribution.currency = newSalary * investment.contribution.percent / 100
+        return investment
+      })
+    }
+  },
   created: function () {
     const salary = localStorage.getItem('salary')
     this.salary = salary || this.salary
