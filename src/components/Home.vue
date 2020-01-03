@@ -12,7 +12,7 @@
       retire), and given the various investments plus how you spend your money,
       it gives you an approximate time period for you to retire.
       </h2>
-      <router-link id='retirement-button' class="button" to="/retirement">Go to App</router-link>
+      <router-link id='retirement-button' class="button" to="/income">Go to App</router-link>
     </div>
   </section>
 </template>

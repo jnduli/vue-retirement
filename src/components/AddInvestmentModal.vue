@@ -18,6 +18,7 @@
             tooltip="How much do you think you'll be able to provide per month to this investment? It can be a percentage of your salary or an actual value"
             :fractional-money="contribution"
             :main-money="salary"
+            :limit="limit"
             ></unit-conversion-input>
 
           <b-field  label="Type of Interest">
@@ -49,7 +50,7 @@ export default {
   components: {
     UnitConversionInput
   },
-  props: ['investment', 'investments', 'salary'],
+  props: ['investment', 'investments', 'salary', 'limit'],
   data () {
     return {
       name: '',

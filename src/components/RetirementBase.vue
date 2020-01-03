@@ -46,6 +46,7 @@
                   tooltip="How much do you spend per month? This can be a percentage of the income or an actual value"
                   :fractional-money="expenses"
                   :main-money="salary"
+                  :limit="limit"
                   ></unit-conversion-input>
             </div>
             <div class="column">
@@ -60,7 +61,7 @@
 
           Add select form on investments made
         <b-modal :active.sync="isAddInvestmentModalActive" has-modal-card>
-            <add-investment-modal v-on:addInvestment="addInvestment" :salary="salary"></add-investment-modal>
+            <add-investment-modal v-on:addInvestment="addInvestment" :salary="salary" :limit="limit"></add-investment-modal>
         </b-modal>
           <button id="add-investment" v-on:click="isAddInvestmentModalActive = true">Add</button>
         </div>
@@ -125,6 +126,14 @@ export default {
     this.retirement_expenses = retirementExpenses || this.retirement_expenses
     const investments = JSON.parse(localStorage.getItem('investments'))
     this.investments = investments || this.investments
+  },
+  computed: {
+    limit: function () {
+      const investmentsTotal = this.investments.reduce((accumulator, current) => {
+        return accumulator + parseFloat(current.contribution.currency)
+      }, 0)
+      return parseFloat(this.salary) - (parseFloat(this.expenses.currency) + investmentsTotal)
+    }
   },
   data () {
     return {

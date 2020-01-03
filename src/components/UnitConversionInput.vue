@@ -1,5 +1,8 @@
 <template>
-  <b-field>
+  <b-field
+    :type="type"
+    :message="danger_message"
+    >
     <template slot="label">
       {{ label }}
       <b-tooltip v-if="tooltip" type="is-dark" size="is-small" class="button is-outlined" :label="tooltip" multilined>
@@ -17,13 +20,30 @@
 <script>
 export default {
   name: 'UnitConversionInput',
-  props: ['label', 'tooltip', 'fractionalMoney', 'mainMoney'],
+  props: ['label', 'tooltip', 'fractionalMoney', 'mainMoney', 'limit'],
+  data () {
+    return {
+      isDanger: false
+    }
+  },
   computed: {
     label_money_unit: function () {
       if (this.fractionalMoney.use_percent) {
         return '%'
       }
       return 'Ksh'
+    },
+    type: function () {
+      if (this.isDanger) {
+        return 'is-danger'
+      }
+      return ''
+    },
+    danger_message: function () {
+      if (this.isDanger) {
+        return 'Amounts should not be beyond income'
+      }
+      return ''
     }
   },
   watch: {
@@ -35,9 +55,15 @@ export default {
           } else {
             this.fractionalMoney.percent = newVal.currency * 100 / this.mainMoney
           }
+          this.isDanger = (this.limit - this.fractionalMoney.currency  < 0)
         }
       },
       deep: true
+    },
+    limit: function (newVal) {
+      if (!isNaN(newVal)) {
+        this.isDanger = (newVal + this.fractionalMoney.currency < 0)
+      }
     }
   },
   methods: {
